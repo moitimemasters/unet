@@ -45,7 +45,7 @@ def main(weights_path, images_dir, prediction_fname):
     model = Unet(3, 1, DEFAULT_FEATURES).to(device="cuda")
     load_checkpoint(torch.load(weights_path), model)
     dataset = PredictDataset(images_dir)
-    loader = DataLoader(dataset=dataset, shuffle=False, batch_size=1, pin_memory=True)
+    loader = DataLoader(dataset=dataset, shuffle=False, batch_size=1, num_workers=8, pin_memory=True)
     loop = tqdm(loader)
     for i, (img, image_name) in enumerate(loop):
         if i >= 3:
@@ -55,9 +55,7 @@ def main(weights_path, images_dir, prediction_fname):
             img = img.to(device="cuda")
             out = torch.sigmoid(model(img))
             out = (out > .5).float()
-            torchvision.utils.save_image(out, f"saved_images/pred_{i}.jpg")
-            torchvision.utils.save_image(img, f"saved_images/real_{i}.jpg")
-            results[image_name[0]] = out.squeeze(1).cpu()
+            results[image_name[0]] = out.squeeze(0).squeeze(0).cpu()
     np.savez_compressed(prediction_fname, **results)
 
 

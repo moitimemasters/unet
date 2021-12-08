@@ -4,13 +4,13 @@ import torch
 
 @dataclass
 class Config:
-    learning_rate = 1e-7
+    learning_rate = 3e-7
     device = "cuda"
     batch_size = 4
     num_epochs = 3
-    num_workers = 1
-    image_height = 150
-    image_width = 200
+    num_workers = 8
+    image_height = 3000
+    image_width = 4000
     pin_memory = True
     load_model = True
     train_img_dir = "train_images/"
