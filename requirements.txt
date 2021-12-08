@@ -1,0 +1,4 @@
+albumentations==0.4.6
+numpy
+pillow
+tqdm
